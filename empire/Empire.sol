@@ -27,12 +27,12 @@ contract Empire is ERC20, Ownable {
     address public empireWbnbPair;
     uint256 public end;
 
-    address private immutable WBNB;
-    address private immutable empireTeam;
-    address private immutable omnisciaTeam;
-    address private immutable marketingTeam;
+    address public constant WBNB = 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
+    address public constant empireTeam = address(0x5abbd94bb0561938130d83fda22e672110e12528);
+    address public constant omnisciaTeam = address(0x21cfe244fEe27Dcf77c9555A24075fdf0930d656);
+    address public constant marketingTeam = address(0xA581289F88A2cC9D40ad990F5773c9e6973bc756);
 
-    address private constant REWARD_TREASURY = address(0x3F9B7da1d832199b2dD23670F2623193636f2e88);
+    address public constant REWARD_TREASURY = address(0x3F9B7da1d832199b2dD23670F2623193636f2e88);
     uint256 private constant TEAM_PERCENTAGE = 0.04 ether; // 4% for each team, 2% for marketing
     uint256 private constant BURN_FEE = 0.001 ether; // 0.1% burn on each transfer
 
@@ -58,16 +58,7 @@ contract Empire is ERC20, Ownable {
         _;
     }
 
-    constructor(
-        address _empireTeam,
-        address _omnisciaTeam,
-        address _marketingTeam,
-        address _wbnb
-    ) public ERC20("Empire", "EMPIRE") Ownable() {
-        WBNB = _wbnb;
-        empireTeam = _empireTeam; //0x5abbd94bb0561938130d83fda22e672110e12528
-        omnisciaTeam = _omnisciaTeam; //0x21cfe244fEe27Dcf77c9555A24075fdf0930d656
-        marketingTeam = _marketingTeam; //0xA581289F88A2cC9D40ad990F5773c9e6973bc756
+    constructor() public ERC20("Empire", "EMPIRE") Ownable() {
     }
 
     function beginLGE(IEmpireFactory _factory) external onlyOwner() {
