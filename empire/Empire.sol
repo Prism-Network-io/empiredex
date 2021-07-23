@@ -27,13 +27,14 @@ contract Empire is ERC20, Ownable {
     address public empireWbnbPair;
     uint256 public end;
 
-    address public constant WBNB = 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
-    address public constant empireTeam = address(0x5abbd94bb0561938130d83fda22e672110e12528);
+    address public constant WBNB = address(0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c);
+    address public constant empireTeam = address(0x5ABBd94bb0561938130d83FdA22E672110e12528);
     address public constant omnisciaTeam = address(0x21cfe244fEe27Dcf77c9555A24075fdf0930d656);
     address public constant marketingTeam = address(0xA581289F88A2cC9D40ad990F5773c9e6973bc756);
 
     address public constant REWARD_TREASURY = address(0x3F9B7da1d832199b2dD23670F2623193636f2e88);
-    uint256 private constant TEAM_PERCENTAGE = 0.04 ether; // 4% for each team, 2% for marketing
+    uint256 private constant TEAM_PERCENTAGE = 0.04 ether; // 4%
+    uint256 private constant OTHER_PERCENTAGE = 0.03 ether; // 3% 
     uint256 private constant BURN_FEE = 0.001 ether; // 0.1% burn on each transfer
 
     event Contribution(address indexed contributor, uint256 contribution);
@@ -63,7 +64,7 @@ contract Empire is ERC20, Ownable {
 
     function beginLGE(IEmpireFactory _factory) external onlyOwner() {
         factory = _factory;
-        end = block.timestamp + 12 hours;
+        end = block.timestamp + 14 days;
         PairType pairType =
             address(this) < WBNB
                 ? PairType.SweepableToken1
@@ -83,11 +84,11 @@ contract Empire is ERC20, Ownable {
         );
         uint256 _totalRaised = totalRaised = address(this).balance;
         uint256 teamAllocation = _totalRaised.wmul(TEAM_PERCENTAGE); // 4%
-        uint256 marketingAllocation = teamAllocation / 2; // 2%
+        uint256 otherAllocation = _totalRaised.wmul(OTHER_PERCENTAGE); // 3%
 
         payable(empireTeam).sendValue(teamAllocation);
-        payable(omnisciaTeam).sendValue(teamAllocation);
-        payable(marketingTeam).sendValue(marketingAllocation);
+        payable(omnisciaTeam).sendValue(otherAllocation);
+        payable(marketingTeam).sendValue(otherAllocation);
 
         _totalRaised = address(this).balance;
 
